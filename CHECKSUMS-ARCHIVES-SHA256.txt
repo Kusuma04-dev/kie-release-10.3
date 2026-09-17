@@ -1,2 +1,0 @@
-e77fe7630c8ca4a57c5008079cb51ff74189d3884d15e8b952ac47c206d384be  release-artifacts-kie.zip
-7024e15580e68551b8ab5812b85442127a9833dcc667c62b85ebbf4b7ab571af  release-artifacts.zip
