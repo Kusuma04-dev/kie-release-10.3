@@ -51,7 +51,7 @@ This document describes the pieces that compose the Apache KIE 10.3 release, upd
 
 ---
 
-## 3. Automations & Local-First Workflows
+## 3. Release Lifecycle & Workflows
 
 ---
 
@@ -73,13 +73,6 @@ This document describes the pieces that compose the Apache KIE 10.3 release, upd
      pnpm update-kogito-version-to --maven 10.3.999-SNAPSHOT
      ```
    - Push branch `10.3.x` to `origin`.
-
----
-
-### AUTOMATION B & C: CI / CD & Nightly SNAPSHOT Pipelines
-
-- Automated daily builds publish snapshot container images (`10.3.x` tags) and Maven SNAPSHOT libraries (`10.3.999-SNAPSHOT`).
-- Jenkins pipeline configurations under `.ci/jenkins/` point to stream branches.
 
 ---
 
@@ -180,34 +173,36 @@ svn commit -m "Apache KIE 10.3.0-rc1 release candidate artifacts"
 
 ---
 
-### AUTOMATION E: Voting Procedure (72h KIE Podling + 72h IPMC)
+### MANUAL STEP E: Voting Procedure
 
-Send vote email to `dev@kie.apache.org` containing:
-- Nexus Staging Repository URL
-- SVN Dev Dist URL (`https://dist.apache.org/repos/dist/dev/incubator/kie/10.3.0-rc1/`)
-- Git tags: `10.3.0-rc1` in `incubator-kie` and `incubator-kie-tools`
-- PPG KEYS: `https://downloads.apache.org/incubator/kie/KEYS`
+1. Start vote thread on `dev@kie.apache.org` (72h).
+2. Once passed, tally results and start IPMC vote thread on `general@incubator.apache.org` (72h).
+3. Once approved, proceed to official release tagging.
 
 ---
 
-### AUTOMATION F: Tag Official Release
+### MANUAL STEP F: Tag Official Release
 
-Once vote passes:
-```bash
-# In incubator-kie
-./script/release/tag-release.sh --rc-tag 10.3.0-rc1 --push
+Once the vote successfully passes:
 
-# In incubator-kie-tools
-git tag -a 10.3.0 -m "Apache KIE 10.3.0 Release" 10.3.0-rc1
-git push origin 10.3.0
-```
+1. **Tag `incubator-kie`**:
+   ```bash
+   ./script/release/tag-release.sh --rc-tag 10.3.0-rc1 --push
+   ```
+2. **Tag `incubator-kie-tools`**:
+   ```bash
+   git tag -a 10.3.0 -m "Apache KIE 10.3.0 Release" 10.3.0-rc1
+   git push origin 10.3.0
+   ```
 
 ---
 
-### AUTOMATION G: Publish Release Candidate to Public Registries
+### AUTOMATION G: Publish Release to Public Registries (Jenkins Orchestrated)
+
+To keep all release secrets, API keys, tokens, and bot credentials securely pre-configured in CI, **Publication is executed via Jenkins** (`Jenkinsfile.release-publish` / release jobs) using Apache bot service accounts.
 
 1. **Nexus Maven Release**:
-   - Log in to `https://repository.apache.org` and release the closed staging repository.
+   - Release the closed staging repository in `https://repository.apache.org` (or triggered via Jenkins deploy job).
 
 2. **Move SVN dist dev to release**:
    ```bash
@@ -216,26 +211,36 @@ git push origin 10.3.0
        https://dist.apache.org/repos/dist/release/incubator/kie/10.3.0
    ```
 
-3. **Publish KIE Tools Components (`incubator-kie-tools`)**:
-   ```bash
-   # Executes npm publish, vsce publish, chrome web store upload, docker push, helm push, gh-pages deploy
-   ./scripts/release/release-all.sh 10.3.0 --publish
-   ```
-   - **NPM Packages**: `@kie-tools/*` published to npm registry (requires `NPM_TOKEN`).
-   - **VS Code Extensions**: Published to Visual Studio Marketplace (requires `VSCE_PAT`).
-   - **Chrome Extensions**: Uploaded and published to Chrome Web Store via Google API (requires `CHROME_*` credentials).
-   - **Container Images**: Pushed to `docker.io/apache/incubator-kie-*` (requires `DOCKER_USERNAME` / `DOCKER_PASSWORD`).
-   - **Helm Charts**: Pushed to OCI registry (requires `HELM_REGISTRY`).
-   - **GitHub Pages**: Sandbox webapp deployed to `incubator-kie-kogito-online` (`gh-pages` branch) and accelerator tagged.
+3. **Publish KIE Tools Components (`incubator-kie-tools`) via Jenkins**:
+   The Jenkins release publish job runs with configured credentials:
+   - **NPM Packages**: `@kie-tools/*` published to npm registry using bot `NPM_TOKEN`.
+   - **VS Code Extensions**: Published to Visual Studio Marketplace using bot `VSCE_PAT`.
+   - **Chrome Extensions**: Uploaded and published to Chrome Web Store using Google API bot credentials.
+   - **Container Images**: Pushed to `docker.io/apache/incubator-kie-*` and Quay using Apache bot credentials.
+   - **Helm Charts**: Pushed to OCI registry using Jenkins registry tokens.
+   - **GitHub Pages**: Sandbox webapp deployed to `incubator-kie-kogito-online` (`gh-pages` branch) using bot GitHub credentials.
+
+   *(Local fallback for testing/dry-run: `./scripts/release/release-all.sh 10.3.0 --publish`)*
 
 ---
 
-## 4. Summary of Changes Between 10.2 and 10.3
+## 4. Release Playbook (Step-by-Step Execution)
+
+### Minor Release (e.g., `main` → `10.3.0`)
+1. **Stream Setup**: Run `AUTOMATION A` (create `10.3.x` stream branch in `incubator-kie` and `incubator-kie-tools`).
+2. **RC Generation**: Run `AUTOMATION D` (produce release candidate artifacts and upload to SVN dev dist).
+3. **Verification**: Perform sanity checks and build from sources on the staged RC artifacts.
+   - *If issues/blockers are found*: Push fixes to the `10.3.x` stream branch and cut `10.3.0-rc2` (repeat `AUTOMATION D`).
+4. **Community Vote**: Execute `MANUAL STEP E` (72h KIE Podling Dev vote + 72h Apache IPMC vote).
+5. **Tag Release**: Execute `MANUAL STEP F` (create and push official `10.3.0` tags).
+6. **Publishing**: Trigger `AUTOMATION G` on Jenkins to publish artifacts across Maven Central, NPM, VS Code Marketplace, Chrome Web Store, container registries, and SVN release dist.
+
+---
+
+## 5. Summary of Key Changes (10.2 vs 10.3)
 
 | Area | 10.2.0 | 10.3.0 |
 |---|---|---|
 | **Java Repositories** | 4 separate repos (`drools`, `optaplanner`, `kogito-runtimes`, `kogito-apps`) | 1 unified reactor in `incubator-kie` |
-| **Java Release Command** | Multiple distinct Jenkins jobs per repo | Single local-first `./script/release/release-all.sh` command |
-| **New VS Code Extensions** | BPMN, DMN, PMML, Bundles | Added `drl-vscode-extension` (via `drools-lsp`) |
-| **Removed Packages** | `dashbuilder-*`, `sonataflow-*`, `yard-*`, `serverless-logic-*` | Cleanly omitted from scripts and release bundles |
-| **Tooling Execution** | Jenkins-dependent multi-pipeline orchestration | Local-first dry-run and release scripts callable locally or via CI |
+| **Java Release Execution** | Multiple Jenkins jobs per repo | Single `./script/release/release-all.sh` or `Jenkinsfile.release` |
+| **Removed Packages** | Included deprecated components | `dashbuilder-*`, `sonataflow-*`, `yard-*`, `serverless-logic-*` omitted |
