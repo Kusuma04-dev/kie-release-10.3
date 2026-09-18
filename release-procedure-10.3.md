@@ -175,8 +175,8 @@ svn commit -m "Apache KIE 10.3.0-rc1 release candidate artifacts"
 
 ### MANUAL STEP E: Voting Procedure
 
-1. Start vote thread on `dev@kie.apache.org` (72h).
-2. Once passed, tally results and start IPMC vote thread on `general@incubator.apache.org` (72h).
+1. Start vote thread on `dev@kie.apache.org` .
+2. Once passed, tally results and start IPMC vote thread on `general@incubator.apache.org` .
 3. Once approved, proceed to official release tagging.
 
 ---
@@ -231,7 +231,7 @@ To keep all release secrets, API keys, tokens, and bot credentials securely pre-
 2. **RC Generation**: Run `AUTOMATION D` (produce release candidate artifacts and upload to SVN dev dist).
 3. **Verification**: Perform sanity checks and build from sources on the staged RC artifacts.
    - *If issues/blockers are found*: Push fixes to the `10.3.x` stream branch and cut `10.3.0-rc2` (repeat `AUTOMATION D`).
-4. **Community Vote**: Execute `MANUAL STEP E` (72h KIE Podling Dev vote + 72h Apache IPMC vote).
+4. **Community Vote**: Execute `MANUAL STEP E` .
 5. **Tag Release**: Execute `MANUAL STEP F` (create and push official `10.3.0` tags).
 6. **Publishing**: Trigger `AUTOMATION G` on Jenkins to publish artifacts across Maven Central, NPM, VS Code Marketplace, Chrome Web Store, container registries, and SVN release dist.
 
