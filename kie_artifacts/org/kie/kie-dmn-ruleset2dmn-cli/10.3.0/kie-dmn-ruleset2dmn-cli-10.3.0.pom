@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>kie-dmn-ruleset2dmn-parent</artifactId>
+    <groupId>org.kie</groupId>
+    <version>10.3.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>kie-dmn-ruleset2dmn-cli</artifactId>
+  <name>KIE :: Decision Model Notation :: ruleset2dmn CLI</name>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer>
+                  <mainClass>org.kie.dmn.ruleset2dmn.cli.App</mainClass>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/kie.conf</resource>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.societegenerale.commons</groupId>
+        <artifactId>arch-unit-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <java.module.name>org.kie.dmn.ruleset2dmn.cli</java.module.name>
+  </properties>
+</project>

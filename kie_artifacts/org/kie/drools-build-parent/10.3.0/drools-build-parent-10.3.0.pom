@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>org.kie</groupId>
+    <artifactId>kie-parent-drools</artifactId>
+    <version>10.3.0</version>
+    <relativePath>../kie-parent-drools/pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>drools-build-parent</artifactId>
+  <name>Drools :: Build Parent</name>
+  <packaging>pom</packaging>
+
+  <properties>
+   <alphanetworkCompilerEnabled>false</alphanetworkCompilerEnabled>
+    <victims.updates>weekly</victims.updates>
+    <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
+    <allowedPomsList>org.kie:drools-build-parent</allowedPomsList>
+    <!-- Used to define which artifact are allowed in dependency management even if not implemented in the multimodule project; e.g. if those are generated on-the-fly by script -->
+    <allowed_GA>org.drools:drools-docs</allowed_GA>
+    <!-- To be overridden by poms with dependency management -->
+    <root_pom>../pom.xml</root_pom>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-maven-plugin</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+      </dependency>
+
+      <!-- TODO - check if those could be moved to engine-specific boms -->
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-verifier-test-jar</artifactId>
+        <version>10.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>kiebase-inclusion</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-scenario-simulation-backend</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.drools.testcoverage</groupId>
+        <artifactId>drools-kie-ci-with-domain-test-domain</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.drools.testcoverage</groupId>
+        <artifactId>drools-kie-ci-without-domain-test-domain</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.drools.testcoverage</groupId>
+        <artifactId>test-integration-ruleunits-jar</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.drools.testcoverage</groupId>
+        <artifactId>drools-test-coverage-jars</artifactId>
+        <type>pom</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-feel</artifactId>
+        <version>${project.version}</version>
+        <classifier>tests</classifier>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-test-resources</artifactId>
+        <version>${project.version}</version>
+        <classifier>tests</classifier>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-core</artifactId>
+        <classifier>tests</classifier>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-core-jsr223-jq</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency> <!-- this is not a user dependency, hence is was added to the boms. -->
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-validation-bootstrap</artifactId>
+        <optional>true</optional>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency> <!-- this is not a user dependency, hence was not added to the boms. -->
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-ruleset2dmn</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-validation</artifactId>
+        <classifier>tests</classifier>
+        <scope>test</scope>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-drl-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-drl-compilation-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-drl-runtime-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-drl-map-input-runtime</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-drl-tests</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-pmml-tests</artifactId>
+        <classifier>tests</classifier>
+        <scope>test</scope>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- Used by kie-pmml-trusty projects -->
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-pmml-dependencies</artifactId>
+        <type>pom</type>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- EFESTO -->
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-efesto-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-efesto-compilation</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-dmn-efesto-runtime</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.kie</groupId>
+          <artifactId>kie-maven-plugin</artifactId>
+          <version>${project.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${version.maven-checkstyle}</version>
+          <executions>
+            <execution>
+              <id>validate</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <checkstyleRules>
+                  <module name="Checker">
+                    <module name="BeforeExecutionExclusionFileFilter">
+                      <property name="fileNamePattern" value="${drools.exclude.checkstyle}"/>
+                    </module>
+                    <!-- Checks for whitespace. -->
+                    <module name="FileTabCharacter">
+                      <property name="severity" value="error"/>
+                      <property name="eachLine" value="true"/>
+                    </module>
+                    <module name="TreeWalker">
+                      <!-- Import settings: getting rid of redundant import, forbid star notation, defined order of imports. -->
+                      <module name="RedundantImport"/>
+                      <module name="AvoidStarImport">
+                        <property name="allowClassImports" value="false"/>
+                        <property name="allowStaticMemberImports" value="false"/>
+                      </module>
+                      <module name="CustomImportOrder">
+                        <property name="customImportOrderRules" value="STANDARD_JAVA_PACKAGE###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE###STATIC"/>
+                        <property name="specialImportsRegExp" value="^javax\."/>
+                        <property name="standardPackageRegExp" value="^java\."/>
+                        <property name="sortImportsInGroupAlphabetically" value="true"/>
+                        <property name="separateLineBetweenGroups" value="true"/>
+                      </module>
+                      <module name="UnusedImports"/>
+                      <module name="NeedBraces">
+                        <property name="tokens"
+                                  value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO"/>
+                      </module>
+                      <module name="EqualsHashCode"/>
+                    </module>
+                    <module name="RegexpHeader">
+                      <property name="header" value="${checkstyle.header.template}"/>
+                      <property name="fileExtensions" value="${checkstyle.header.extensions}"/>
+                    </module>
+                  </module>
+                </checkstyleRules>
+                <outputFile>${project.build.directory}/checkstyle.log</outputFile>
+                <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                <includeResources>true</includeResources>
+                <includeTestResources>true</includeTestResources>
+                <consoleOutput>false</consoleOutput>
+                <logViolationsToConsole>${checkstyle.logViolationsToConsole}</logViolationsToConsole>
+                <failsOnError>false</failsOnError>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+</project>

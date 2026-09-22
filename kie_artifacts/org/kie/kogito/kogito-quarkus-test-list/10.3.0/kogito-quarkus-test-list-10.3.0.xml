@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testArtifacts>
+    <testArtifact>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-with-drools-quarkus-integration-test</artifactId>
+        <version>10.3.0</version>
+    </testArtifact>
+    <testArtifact>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-quarkus-rules-integration-test</artifactId>
+        <version>10.3.0</version>
+    </testArtifact>
+    <testArtifact>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-quarkus-predictions-integration-test</artifactId>
+        <version>10.3.0</version>
+    </testArtifact>
+    <testArtifact>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>integration-tests-quarkus-rules</artifactId>
+        <version>10.3.0</version>
+    </testArtifact>
+    <testArtifact>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>integration-tests-quarkus-legacy-rules</artifactId>
+        <version>10.3.0</version>
+    </testArtifact>
+    <testArtifact>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>integration-tests-quarkus-processes-infinispan</artifactId>
+        <version>10.3.0</version>
+    </testArtifact>
+</testArtifacts>

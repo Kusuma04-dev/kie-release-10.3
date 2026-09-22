@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache</groupId>
+    <artifactId>apache</artifactId>
+    <version>32</version>
+  </parent>
+
+  <groupId>org.kie</groupId>
+  <artifactId>drools-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>10.3.0</version>
+
+  <name>Drools :: Parent</name>
+  <description>
+    The repo contains all code related to Drools project.
+  </description>
+  <url>http://www.drools.org</url>
+  <inceptionYear>2001</inceptionYear>
+  <organization>
+    <name>The Apache Software Foundation</name>
+    <url>https://apache.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:https://github.com/apache/incubator-kie-drools.git</connection>
+    <developerConnection>scm:git:https://github.com/apache/incubator-kie-drools.git</developerConnection>
+    <url>https://github.com/apache/incubator-kie-drools</url>
+  </scm>
+
+  <ciManagement>
+    <system>jenkins</system>
+    <url>https://ci-builds.apache.org/job/KIE/</url>
+  </ciManagement>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/apache/incubator-kie-issues/issues</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <name>The Apache KIE Team</name>
+      <email>dev@kie.apache.org</email>
+      <url>https://kie.apache.org</url>
+      <organization>Apache Software Foundation</organization>
+      <organizationUrl>http://apache.org/</organizationUrl>
+    </developer>
+  </developers>
+  <mailingLists>
+    <mailingList>
+      <name>Development List</name>
+      <subscribe>dev-subscribe@kie.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@kie.apache.org</unsubscribe>
+      <post>dev@kie.apache.org</post>
+      <archive>https://lists.apache.org/list.html?dev@kie.apache.org</archive>
+    </mailingList>
+    <mailingList>
+      <name>User List</name>
+      <subscribe>users-subscribe@kie.apache.org</subscribe>
+      <unsubscribe>users-unsubscribe@kie.apache.org</unsubscribe>
+      <post>users@kie.apache.org</post>
+      <archive>https://lists.apache.org/list.html?users@kie.apache.org</archive>
+    </mailingList>
+    <mailingList>
+      <name>Commits List</name>
+      <subscribe>commits-subscribe@kie.apache.org</subscribe>
+      <unsubscribe>commits-unsubscribe@kie.apache.org</unsubscribe>
+      <post>commits@kie.apache.org</post>
+      <archive>https://lists.apache.org/list.html?commits@kie.apache.org</archive>
+    </mailingList>
+    <mailingList>
+      <name>setup</name>
+      <subscribe>https://groups.google.com/forum/#!forum/drools-setup</subscribe>
+      <unsubscribe>https://groups.google.com/forum/#!forum/drools-setup</unsubscribe>
+      <otherArchives>
+        <!-- Very old (and long deprecated) user mailing list -->
+        <otherArchive>http://drools.46999.n3.nabble.com/Drools-User-forum-f47000.html</otherArchive>
+      </otherArchives>
+    </mailingList>
+    <mailingList>
+      <name>usage</name>
+      <subscribe>https://groups.google.com/forum/#!forum/drools-usage</subscribe>
+      <unsubscribe>https://groups.google.com/forum/#!forum/drools-usage</unsubscribe>
+    </mailingList>
+  </mailingLists>
+
+  <properties>
+    <project.build.outputTimestamp>2026-09-14T15:49:33Z</project.build.outputTimestamp>
+    <version.maven-remote-resources-plugin>3.3.0</version.maven-remote-resources-plugin>
+    <version.maven.artifact.plugin>3.6.1</version.maven.artifact.plugin>
+  </properties>
+
+  <!-- Block apache.snapshots inherited from org.apache:apache parent -->
+  <repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/snapshots/</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/snapshots/</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-artifact-plugin</artifactId>
+          <version>${version.maven.artifact.plugin}</version>
+          <configuration>
+            <outputTimestamp>${project.build.outputTimestamp}</outputTimestamp>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <modules>
+    <module>kie-no-dependency-management-enforcer-rule</module>
+    <module>kie-no-external-managed-dependency-enforcer-rule</module>
+    <module>kie-parent</module>
+    <module>kie-parent-drools</module>
+    <module>bom</module>
+    <module>build-parent</module>
+    <module>kie-quarkus-build-parent</module>
+    <module>kie-api</module>
+    <module>kie-internal</module>
+    <module>kie-util</module>
+    <module>kie-memory-compiler</module>
+    <module>drools-ruleunits</module>
+    <module>drools-wiring</module>
+    <module>kie-test-util</module>
+    <module>drools-util</module>
+    <module>drools-io</module>
+    <module>drools-core</module>
+    <module>drools-base</module>
+    <module>drools-commands</module>
+    <module>drools-kiesession</module>
+    <module>drools-ecj</module>
+    <module>drools-drl</module>
+    <module>drools-compiler</module>
+    <module>drools-mvel</module>
+    <module>drools-xml-support</module>
+    <module>drools-legacy-test-util</module>
+    <module>drools-tms</module>
+    <module>drools-beliefs</module>
+    <module>drools-serialization-protobuf</module>
+    <module>drools-traits</module>
+    <module>drools-verifier</module>
+    <module>drools-persistence</module>
+    <module>drools-templates</module>
+    <module>drools-decisiontables</module>
+    <module>drools-examples</module>
+    <module>kie-ci</module>
+    <module>drools-model</module>
+    <module>drools-examples-api</module>
+    <module>drools-test-coverage</module>
+    <module>drools-scenario-simulation</module>
+    <module>drools-metric</module>
+    <module>drools-alphanetwork-compiler</module>
+    <module>drools-engine</module>
+    <module>drools-engine-classic</module>
+    <module>drools-impact-analysis</module>
+    <module>drools-retediagram</module>
+    <module>drools-fastutil</module>
+    <module>efesto</module>
+    <module>kie-drl</module>
+    <module>kie-dmn</module>
+    <module>kie-pmml-trusty</module>
+    <module>kie-maven-plugin</module>
+    <module>kie-archetypes</module>
+    <module>drools-quarkus-extension</module>
+    <module>drools-reliability</module>
+    <module>drools-drlonyaml-parent</module>
+    <!-- BEGIN optaplanner modules (auto) -->
+    <module>optaplanner-parent</module>
+    <module>optaplanner-build/optaplanner-bom</module>
+    <module>optaplanner-build/optaplanner-ide-config</module>
+    <module>optaplanner-build/optaplanner-build-parent</module>
+    <module>optaplanner-core</module>
+    <module>optaplanner-persistence</module>
+    <module>optaplanner-benchmark</module>
+    <module>optaplanner-test</module>
+    <module>optaplanner-spring-integration</module>
+    <module>optaplanner-quarkus-integration</module>
+    <module>optaplanner-examples</module>
+    <!-- END optaplanner modules (auto) -->
+    <!-- BEGIN kogito-runtimes modules (auto) -->
+    <module>kogito-runtimes-parent</module>
+    <module>kogito-build</module>
+    <module>kogito-bom</module>
+    <module>kogito-api</module>
+    <module>kogito-drools</module>
+    <module>kogito-jbpm</module>
+    <module>kogito-codegen-modules</module>
+    <module>kogito-test-utils</module>
+    <module>kogito-quarkus</module>
+    <module>kogito-grafana-api</module>
+    <module>kogito-addons</module>
+    <module>kogito-workitems</module>
+    <module>kogito-maven-plugin</module>
+    <module>kogito-gradle-plugin</module>
+    <module>kogito-springboot</module>
+    <module>kogito-maven-plugin-test</module>
+    <module>kogito-gradle-plugin-test</module>
+    <!-- END kogito-runtimes modules (auto) -->
+    <!-- BEGIN kogito-apps modules (auto) -->
+    <module>kogito-apps-parent</module>
+    <module>kogito-apps-bom</module>
+    <module>kogito-apps-build-parent</module>
+    <module>kogito-persistence-commons</module>
+    <module>kogito-jobs-service</module>
+    <module>kogito-data-index</module>
+    <module>kogito-data-audit</module>
+    <module>kogito-explainability</module>
+    <module>kogito-trusty</module>
+    <module>kogito-jitexecutor</module>
+    <module>kogito-jobs</module>
+    <module>kogito-apps-integration-tests</module>
+    <module>kogito-apps-quarkus</module>
+    <module>kogito-apps-springboot</module>
+    <!-- END kogito-apps modules (auto) -->
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>fullProfile</id>
+      <activation>
+        <property>
+          <name>full</name>
+        </property>
+      </activation>
+      <modules>
+        <module>drools-distribution</module>
+        <module>optaplanner-build/optaplanner-javadoc</module>
+        <module>optaplanner-build/optaplanner-distribution-internal</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>reproducible-build</id>
+      <activation>
+        <property>
+          <name>reproducible</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-artifact-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-buildplan</id>
+                <goals>
+                  <goal>check-buildplan</goal>
+                </goals>
+                <!-- The execution's configuration is part of the pluginManagement. This piece here only makes sure the
+                     execution is enabled (by specifying a phase) for full profile builds. -->
+                <phase>validate</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- Compares built artifacts against reference artifacts from a remote repository.
+           Separated from reproducible-build because compare requires published reference artifacts,
+           which are unavailable for SNAPSHOT builds (no daily snapshot deploys).
+           Activate with -Dreproducible.compare during release builds, e.g.:
+             mvn install -Dreproducible -Dreproducible.compare -->
+      <id>reproducible-build-compare</id>
+      <activation>
+        <property>
+          <name>reproducible.compare</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-artifact-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>compare</id>
+                <goals>
+                  <goal>compare</goal>
+                </goals>
+                <phase>install</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile><!-- this profile is defined here in order to be available from the root of the drools repository and maven reactor build -->
+      <id>rewrite</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.openrewrite.maven</groupId>
+            <artifactId>rewrite-maven-plugin</artifactId>
+            <version>4.42.0</version>
+            <configuration>
+              <activeRecipes>
+                <!--                <recipe>org.drools.rewrite.PrintStackTraceToLogError</recipe>-->
+                <recipe>org.openrewrite.java.testing.junit5.JUnit4to5Migration</recipe>
+              </activeRecipes>
+              <configLocation>${maven.multiModuleProjectDirectory}/.openrewrite/rewrite.yml</configLocation>
+              <!-- see https://rewriteoss.slack.com/archives/C01A843MWG5/p1654176555223819 https://github.com/openrewrite/rewrite/issues/1596#issuecomment-1113645648 -->
+              <exclusions>
+                <exclude>*/src/test/**</exclude>
+              </exclusions>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>org.openrewrite.recipe</groupId>
+                <!--                <artifactId>rewrite-logging-frameworks</artifactId>-->
+                <!--                <version>1.8.0</version>-->
+                <artifactId>rewrite-testing-frameworks</artifactId>
+                <version>1.23.0</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>enableNewParser</id>
+      <activation>
+        <property>
+          <name>enableNewParser</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <systemPropertyVariables>
+                <!-- false by default. Activate this profile when you test the new parser -->
+                <drools.drl.antlr4.parser.enabled>true</drools.drl.antlr4.parser.enabled>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>  
+  </profiles>
+
+</project>
