@@ -1,11 +1,9 @@
 tag 10.3.0-rc1
-Tagger: Nithin R Krishnan <nithin.r.krishnan@ibm.com>
-Date:   Tue Sep 15 06:37:23 2026 -0700
+
 
 Release 10.3.0-rc1
 
 commit 1652e321d8bde3ffabaf2f93d7bf270fa4ed31b7
-Author: Nithin R Krishnan <nithin.r.krishnan@ibm.com>
 Date:   Tue Sep 15 06:37:22 2026 -0700
 
     chore: release 10.3.0
