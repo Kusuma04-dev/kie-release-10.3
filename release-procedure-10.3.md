@@ -12,8 +12,8 @@ This document describes the pieces that compose the Apache KIE 10.3 release, upd
 
 | # | REPO (`incubator-kie-[repo]`) | GIT REF | OPERATING SYSTEM & REQUIREMENTS | BUILD COMMAND | PRODUCED ARTIFACTS | UPDATE OWN VERSION COMMAND (commits D and R) | UPDATE UPSTREAM VERSIONS (commits D and R) | Additional release command (commit R) |
 |---|---|---|---|---|---|---|---|---|
-| 1 | **`incubator-kie`** *(Consolidated Drools, OptaPlanner, Kogito Runtimes, and Kogito Apps)* | TAG: `10.3.0` | Ubuntu 22.04+<br>JDK 17.0.12+ (GraalVM JDK 17 for native)<br>Maven 3.9.6+<br>Docker 25+ | `./script/release/build.sh --skip-tests` *(optional: `--jitexecutor-native`)* | JARs, POMs, sources, and javadocs installed to local Maven repository (`~/.m2/repository`) | `./script/release/update-version.sh <version>`<br>*(Handled automatically during RC creation by `rc-commit.sh`)* | n/a (root unified Java reactor) | `./script/release/deploy-to-staging.sh --tag <rc-tag> --deploy` |
-| 2 | **`incubator-kie-tools`** | TAG: `10.3.0` | Ubuntu 22.04+<br>Node.js 22<br>pnpm 9.x<br>Go 1.21+<br>Helm 3.x<br>Docker 25+ | `./scripts/release/release-all.sh <version> --rc` | VS Code extensions (`.vsix`), Chrome extension ZIPs, WebApp ZIPs, Sources ZIP, NPM packages ZIP, Container image tarballs, Helm chart tarballs in `release-artifacts/` | `pnpm update-version-to <version>`<br>`pnpm update-stream-name-to <stream-name>` | `pnpm update-kogito-version-to --maven <version>` | `./scripts/release/release-all.sh <version> --publish` |
+| 1 | **`incubator-kie`** *(KIE repo — Drools, OptaPlanner, Kogito Runtimes, and Kogito Apps)* | TAG: `10.3.0` | Ubuntu 22.04+<br>JDK 17.0.12+<br>Maven 3.9.6+<br>Docker 25+ | `./script/release/release-all.sh <version> --rc --skip-tests` | JARs, POMs, sources, and javadocs installed to local Maven repository (`~/.m2/repository`) | `./script/release/update-version.sh <version>`<br>*(Handled automatically during RC creation by `02-rc-commit.sh`)* | n/a (single KIE reactor) | `./script/release/release-all.sh <version> --rc --deploy --push-tag` |
+| 2 | **`incubator-kie-tools`** | TAG: `10.3.0` | Ubuntu 22.04+<br>Node.js 22<br>pnpm 9.x<br>Go 1.21+<br>Helm 3.x<br>Docker 25+ | `./scripts/release/release.sh <version> --rc` | VS Code extensions (`.vsix`), Chrome extension ZIPs, WebApp ZIPs, Sources ZIP, NPM packages ZIP, Container image tarballs, Helm chart tarballs in `release-artifacts/` | `pnpm update-version-to <version>`<br>`pnpm update-stream-name-to <stream-name>` | `pnpm update-kogito-version-to --maven <version>` | `./scripts/release/release.sh <version> --publish` |
 
 > **Consolidation Note**: Since the 10.3.x consolidation, `drools`, `optaplanner`, `kogito-runtimes`, and `kogito-apps` are all modules of the same root POM in `incubator-kie`. The release process is a single-repo, single-command workflow.
 
@@ -85,18 +85,14 @@ This document describes the pieces that compose the Apache KIE 10.3 release, upd
 #### Step D.1: Java Reactor Release Candidate (`incubator-kie`)
 Run from the `incubator-kie` repository:
 ```bash
-./script/release/release-all.sh \
-    --version 10.3.0 \
-    --tag 10.3.0-rc1 \
-    --skip-tests \
-    --deploy \
-    --push-tag
+# RC mode: build, create R commit, sign and deploy to Apache Nexus staging, push tag
+./script/release/release-all.sh 10.3.0 --rc --tag 10.3.0-rc1 --skip-tests --deploy --push-tag
 ```
 
 **Actions Executed**:
-1. `rc-commit.sh`: Checks out temporary branch, runs `update-version.sh 10.3.0`, commits the R commit, tags `10.3.0-rc1`, and pushes the tag.
-2. `build.sh`: Runs `mvn clean install -DskipTests -Dfull` across all reactor modules.
-3. `deploy-to-staging.sh`: Signs artifacts with GPG and deploys to Apache Nexus Staging (`https://repository.apache.org/service/local/staging/deploy/maven2`).
+1. `02-rc-commit.sh`: Checks out temporary branch, runs `01-update-version.sh 10.3.0`, commits the R commit, tags `10.3.0-rc1`, and pushes the tag.
+2. `03-build.sh`: Runs `mvn clean install -DskipTests -Dfull` across all reactor modules.
+3. `04-deploy-to-staging.sh`: Signs artifacts with GPG and deploys to Apache Nexus Staging (`https://repository.apache.org/service/local/staging/deploy/maven2`).
 4. **Action**: Log into [repository.apache.org](https://repository.apache.org), inspect and close the staging repository.
 
 ---
@@ -109,8 +105,8 @@ pnpm update-version-to 10.3.0
 pnpm update-kogito-version-to --maven 10.3.0
 pnpm update-stream-name-to 10.3.0
 
-# 2. Package all release artifacts
-./scripts/release/release-all.sh 10.3.0 --rc
+# 2. Package all release artifacts (RC mode: builds + collects ASF-compliant artifacts)
+./scripts/release/release.sh 10.3.0 --rc
 ```
 
 **Artifacts Produced in `release-artifacts/`**:
@@ -187,11 +183,11 @@ Once the vote successfully passes:
 
 1. **Tag `incubator-kie`**:
    ```bash
-   ./script/release/tag-release.sh --rc-tag 10.3.0-rc1 --push
+   ./script/release/05-tag-release.sh --rc-tag 10.3.0-rc1 --push
    ```
 2. **Tag `incubator-kie-tools`**:
    ```bash
-   git tag -a 10.3.0 -m "Apache KIE 10.3.0 Release" 10.3.0-rc1
+   git tag -a 10.3.0 10.3.0-rc1 -m "Release 10.3.0"
    git push origin 10.3.0
    ```
 
@@ -199,7 +195,7 @@ Once the vote successfully passes:
 
 ### AUTOMATION G: Publish Release to Public Registries (Jenkins Orchestrated)
 
-To keep all release secrets, API keys, tokens, and bot credentials securely pre-configured in CI, **Publication is executed via Jenkins** (`Jenkinsfile.release-publish` / release jobs) using Apache bot service accounts.
+To keep all release secrets, API keys, tokens, and bot credentials securely pre-configured in CI, **Publication is executed via Jenkins** (`Jenkinsfile.103xplus.release-publish`) using Apache bot service accounts.
 
 1. **Nexus Maven Release**:
    - Release the closed staging repository in `https://repository.apache.org` (or triggered via Jenkins deploy job).
@@ -220,7 +216,7 @@ To keep all release secrets, API keys, tokens, and bot credentials securely pre-
    - **Helm Charts**: Pushed to OCI registry using Jenkins registry tokens.
    - **GitHub Pages**: Sandbox webapp deployed to `incubator-kie-kogito-online` (`gh-pages` branch) using bot GitHub credentials.
 
-   *(Local fallback for testing/dry-run: `./scripts/release/release-all.sh 10.3.0 --publish`)*
+   *(Local fallback for testing/dry-run: `./scripts/release/release.sh 10.3.0 --publish`)*
 
 ---
 
@@ -242,5 +238,5 @@ To keep all release secrets, API keys, tokens, and bot credentials securely pre-
 | Area | 10.2.0 | 10.3.0 |
 |---|---|---|
 | **Java Repositories** | 4 separate repos (`drools`, `optaplanner`, `kogito-runtimes`, `kogito-apps`) | 1 unified reactor in `incubator-kie` |
-| **Java Release Execution** | Multiple Jenkins jobs per repo | Single `./script/release/release-all.sh` or `Jenkinsfile.release` |
+| **Java Release Execution** | Multiple Jenkins jobs per repo | Single `./script/release/release-all.sh` orchestrated via `Jenkinsfile.103xplus.release-candidate` / `Jenkinsfile.103xplus.release-publish` |
 | **Removed Packages** | Included deprecated components | `dashbuilder-*`, `sonataflow-*`, `yard-*`, `serverless-logic-*` omitted |
