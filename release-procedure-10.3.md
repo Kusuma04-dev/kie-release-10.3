@@ -13,7 +13,7 @@ This document describes the pieces that compose the Apache KIE 10.3 release, upd
 | # | REPO (`incubator-kie-[repo]`) | GIT REF | OPERATING SYSTEM & REQUIREMENTS | BUILD COMMAND | PRODUCED ARTIFACTS | UPDATE OWN VERSION COMMAND (commits D and R) | UPDATE UPSTREAM VERSIONS (commits D and R) | Additional release command (commit R) |
 |---|---|---|---|---|---|---|---|---|
 | 1 | **`incubator-kie`** *(KIE repo — Drools, OptaPlanner, Kogito Runtimes, and Kogito Apps)* | TAG: `10.3.0` | Ubuntu 22.04+<br>JDK 17.0.12+<br>Maven 3.9.6+<br>Docker 25+ | `./script/release/release-all.sh <version> --rc --skip-tests` | JARs, POMs, sources, and javadocs installed to local Maven repository (`~/.m2/repository`) | `./script/release/update-version.sh <version>`<br>*(Handled automatically during RC creation by `02-rc-commit.sh`)* | n/a (single KIE reactor) | `./script/release/release-all.sh <version> --rc --deploy --push-tag` |
-| 2 | **`incubator-kie-tools`** | TAG: `10.3.0` | Ubuntu 22.04+<br>Node.js 22<br>pnpm 9.x<br>Go 1.21+<br>Helm 3.x<br>Docker 25+ | `./scripts/release/release.sh <version> --rc` | VS Code extensions (`.vsix`), Chrome extension ZIPs, WebApp ZIPs, Sources ZIP, NPM packages ZIP, Container image tarballs, Helm chart tarballs in `release-artifacts/` | `pnpm update-version-to <version>`<br>`pnpm update-stream-name-to <stream-name>` | `pnpm update-kogito-version-to --maven <version>` | `./scripts/release/release.sh <version> --publish` |
+| 2 | **`incubator-kie-tools`** | TAG: `10.3.0` | Ubuntu 22.04+<br>Node.js 22<br>pnpm 9.x<br>Go 1.21+<br>Helm 3.x<br>Docker 25+ | `./scripts/release/release-all.sh <version> --rc` | VS Code extensions (`.vsix`), Chrome extension ZIPs, WebApp ZIPs, Sources ZIP, NPM packages ZIP, Container image tarballs, Helm chart tarballs in `release-artifacts/` | `pnpm update-version-to <version>`<br>`pnpm update-stream-name-to <stream-name>` | `pnpm update-kogito-version-to --maven <version>` | `./scripts/release/release-all.sh <version> --publish` |
 
 > **Consolidation Note**: Since the 10.3.x consolidation, `drools`, `optaplanner`, `kogito-runtimes`, and `kogito-apps` are all modules of the same root POM in `incubator-kie`. The release process is a single-repo, single-command workflow.
 
@@ -106,7 +106,7 @@ pnpm update-kogito-version-to --maven 10.3.0
 pnpm update-stream-name-to 10.3.0
 
 # 2. Package all release artifacts (RC mode: builds + collects ASF-compliant artifacts)
-./scripts/release/release.sh 10.3.0 --rc
+./scripts/release/release-all.sh 10.3.0 --rc
 ```
 
 **Artifacts Produced in `release-artifacts/`**:
@@ -216,7 +216,7 @@ To keep all release secrets, API keys, tokens, and bot credentials securely pre-
    - **Helm Charts**: Pushed to OCI registry using Jenkins registry tokens.
    - **GitHub Pages**: Sandbox webapp deployed to `incubator-kie-kogito-online` (`gh-pages` branch) using bot GitHub credentials.
 
-   *(Local fallback for testing/dry-run: `./scripts/release/release.sh 10.3.0 --publish`)*
+   *(Local fallback for testing/dry-run: `./scripts/release/release-all.sh 10.3.0 --publish`)*
 
 ---
 
